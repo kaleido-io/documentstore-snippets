@@ -1,2 +1,2 @@
 # documentstore-snippets
-Sample code for the Kaledio document store service
+Sample code for the Kaleido document store service
