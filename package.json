@@ -10,8 +10,8 @@
     "inspect": "node ./lib/inspect.js",
     "transfer": "node ./lib/transfer.js",
     "transfer_logs": "node ./lib/transfer_logs.js",
-    "delete": "node ./lib/delete.js",
-    "events": "node ./lib/events.js"
+    "transfer_events": "node ./lib/transfer_events.js",
+    "delete": "node ./lib/delete.js"
   },
   "keywords": [],
   "author": "",

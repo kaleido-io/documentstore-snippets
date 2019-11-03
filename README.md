@@ -10,8 +10,8 @@ This repository contains a set of code snippets written in **NodeJS** illustrati
 - [Inspect](#inspect)
 - [Transfer](#transfer)
 - [Transfer Logs](#transfer-logs)
+- [Transfer Events](#transfer-events)
 - [Delete](#delete)
-- [Events](#events)
   
 The complete API specification can be found [here](https://api.kaleido.io/documentstore.html). The API swagger file can be downloaded [here](https://api.kaleido.io/service-documentstore.yaml). For more information about the document store service, visit the [documentation](https://docs.kaleido.io/kaleido-services/document-store/).
 
@@ -326,31 +326,7 @@ axios({
 ```
 To run the sample code: `npm run transfer_logs`
 
-## Delete
-
-### Sample code
-
-```Javascript
-'use strict';
-
-const axios = require('axios');
-const common = require('./common');
-
-axios({
-    method: 'delete',
-    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images/kaleido-logo.png',
-    auth: {
-      username: common.APP_CREDENTIAL_USER,
-      password: common.APP_CREDENTIAL_PASSWORD
-    }
-}).catch(err => {
-  console.log('Failed to delete document: ' + err);
-});
-```
-
-To run the sample code: `npm run delete`
-
-## Events
+## Transfer Events
 
 ### Sample code
 
@@ -401,4 +377,29 @@ io.connect(common.DOCUMENT_STORE_API_ENDPOINT_SOCKET_IO,
 
 > Tip: open two terminal windows and run the event snippet in one, and the transfer snippet in the other to see events in action.
 
-To run the sample code: `npm run events`
+To run the sample code: `npm run transfer_events`
+
+
+## Delete
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+axios({
+    method: 'delete',
+    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images/kaleido-logo.png',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).catch(err => {
+  console.log('Failed to delete document: ' + err);
+});
+```
+
+To run the sample code: `npm run delete`
