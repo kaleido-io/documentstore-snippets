@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "Sample code snippts for Document Store",
   "scripts": {
-    "events": "node ./lib/events.js",
     "upload": "node ./lib/upload.js",
+    "download": "node ./lib/download.js",
     "browse": "node ./lib/browse.js",
     "search": "node ./lib/search.js",
-    "metadata": "node ./lib/metadata.js",
-    "download": "node ./lib/download.js",
+    "inspect": "node ./lib/inspect.js",
     "transfer": "node ./lib/transfer.js",
     "transfer_logs": "node ./lib/transfer_logs.js",
-    "delete": "node ./lib/delete.js"
+    "delete": "node ./lib/delete.js",
+    "events": "node ./lib/events.js"
   },
   "keywords": [],
   "author": "",

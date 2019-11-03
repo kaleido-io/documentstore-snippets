@@ -4,6 +4,7 @@
 This repository contains a set of code snippets written in **NodeJS** illustrating how to programmatically interact with the Kaleido Document Store service. The snippets include:
 
 - [Upload](#upload)
+- [Download](#download)
 - [Browse](#browse)
 - [Search](#search)
 - [Inspect](#inspect)
@@ -84,6 +85,33 @@ axios({
 - The property **hash** in the JSON response will include a value that uniquely identifies the document by content. This value can be used to pin the document on-chain by storing it in a smart contract.
 
 To run the sample code: `npm run upload`
+
+## Download
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const fs = require('fs');
+const axios = require('axios');
+const common = require('./common');
+
+axios({
+    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images/kaleido-logo.png',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    },
+    responseType: 'stream'
+}).then(response => {
+  response.data.pipe(fs.createWriteStream(__dirname + '/../resources/kaleido_downloaded.png'));
+}).catch(err => {
+  console.log('Failed to download document: ' + err);
+});
+```
+
+To run the sample code: `npm run download`
 
 ## Browse
 
@@ -216,34 +244,7 @@ axios({
 ### Notes
 - The value of the query string **details_only** in the request must be **true** in order to obtain the resource metadata. Otherwise the resource content will be returned.
 
-To run the sample code: `npm run metadata`
-
-## Download
-
-### Sample code
-
-```Javascript
-'use strict';
-
-const fs = require('fs');
-const axios = require('axios');
-const common = require('./common');
-
-axios({
-    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images/kaleido-logo.png',
-    auth: {
-      username: common.APP_CREDENTIAL_USER,
-      password: common.APP_CREDENTIAL_PASSWORD
-    },
-    responseType: 'stream'
-}).then(response => {
-  response.data.pipe(fs.createWriteStream(__dirname + '/../resources/kaleido_downloaded.png'));
-}).catch(err => {
-  console.log('Failed to download document: ' + err);
-});
-```
-
-To run the sample code: `npm run download`
+To run the sample code: `npm run inspect`
 
 ## Transfer
 
