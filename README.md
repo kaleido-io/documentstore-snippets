@@ -26,6 +26,8 @@ This repository contains a set of code snippets written in **NodeJS** illustrati
 
 ## Upload
 
+### Sample code
+
 ```Javascript
 'use strict';
 
@@ -53,11 +55,26 @@ axios({
 });
 ```
 
-> Note: the name of the document in the file system and the service do not necessarily have to match. Also, the directory "images" will be automatically created.
+### Sample response
+
+```JSON
+{ 
+  result: "success",
+  hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+}
+```
+
+### Notes
+- **PUT** requests will overwrite the document if it already exists in storage. **POST** requests on the other hand will return 409 (conflict).
+- The folder **images** will be automatically created if it doesn't already exist.
+- The name of the document in the file system and the request can be different.
+- The property **hash** in the JSON response will include a value that uniquely identifies the document by content. This value can be used to pin the document on-chain by storing it in a smart contract.
 
 To run the sample code: `npm run upload`
 
 ## Browse
+
+### Sample code
 
 ```Javascript
 'use strict';
@@ -66,7 +83,7 @@ const axios = require('axios');
 const common = require('./common');
 
 axios({
-    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS,
+    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images',
     auth: {
       username: common.APP_CREDENTIAL_USER,
       password: common.APP_CREDENTIAL_PASSWORD
@@ -78,11 +95,33 @@ axios({
 });
 ```
 
-> Note: results are paginated with a default limit of 100. Use query strings **offset** and **limit** to iterate through results.
+### Sample response
+```JSON
+{ is_truncated: false,
+  entries:
+   [
+     { 
+       name: "kaleido-logo.png",
+       is_directory: false,
+       size: 141733,
+       last_modified: "2019-11-03T13:56:59.529Z",
+       hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+      }
+   ]
+}
+```
+
+### Notes
+- The response will include all the entries (documents and directories) that reside in the directory specified in the request URL path.
+- The boolean property **is_directory** in the JSON response indicates whether an entry is a file or a directory. 
+- Results are paginated with a default limit of 100. Use query strings **offset** and **limit** to iterate through results.
+- The boolean property **is_truncated** in the JSON response indicates if there are more results available.
 
 To run the sample code: `npm run browse`
 
 ## Search
+
+### Sample code
 
 ```Javascript
 'use strict';
@@ -93,7 +132,7 @@ const common = require('./common');
 const SEARCH_ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 9);
 
 axios({
-    url: SEARCH_ENDPOINT + '/search?query=b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77&by_hash=true',
+    url: SEARCH_ENDPOINT + '/search?query=kaleido',
     auth: {
       username: common.APP_CREDENTIAL_USER,
       password: common.APP_CREDENTIAL_PASSWORD
@@ -104,11 +143,32 @@ axios({
   console.log('Failed to search for document: ' + err);
 });
 ```
-> Note: it is possible to search by document path/name passing `false` in query string **by_hash**. Also, like in the browse API results are paginated.
+
+### Sample response
+```JSON
+{
+  documents:
+   [
+     {
+       full_path: "images/kaleido-logo.png",
+       last_modified: "2019-11-03T14:10:59.201Z",
+       hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
+       size: 141733
+      }
+    ]
+}
+```
+
+### Notes
+
+- Set the value of the query string **by_hash** to **true** in order to search by hash instead of path/name.
+- Search results will contain up to 100 matches.
 
 To run the sample code: `npm run search`
 
 ## Metadata
+
+### Sample code
 
 ```Javascript
 'use strict';
@@ -129,9 +189,25 @@ axios({
 });
 ```
 
+### Sample response
+```JSON
+{ 
+  name: "kaleido-logo.png",
+  is_directory: false,
+  size: 141733,
+  last_modified: "2019-11-03T14:10:59.201Z",
+  hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+}
+```
+
+### Notes
+- The value of the query string **details_only** in the request must be **true** in order to obtain the resource metadata. Otherwise the resource content will be returned.
+
 To run the sample code: `npm run metadata`
 
 ## Download
+
+### Sample code
 
 ```Javascript
 'use strict';
@@ -158,6 +234,8 @@ To run the sample code: `npm run download`
 
 ## Transfer
 
+### Sample code
+
 ```Javascript
 'use strict';
 
@@ -183,11 +261,21 @@ axios({
 });
 ```
 
-> Note: In a practical destinations would correspond to document store service instances belonging to different organizations. In this example we are using a single service instance just for illustration/test purposes.
+### Sample response
+```JSON
+{
+  result: "Document sent."
+}
+```
+
+### Notes
+ - In a practical application destinations would correspond to document store service instances belonging to different organizations. In this example we are using a single service instance just for illustration/test purposes.
 
 To run the sample code: `npm run transfer`
 
 ## Delete
+
+### Sample code
 
 ```Javascript
 'use strict';
@@ -210,6 +298,9 @@ axios({
 To run the sample code: `npm run delete`
 
 ## Events
+
+### Sample code
+
 ```Javascript
 'use strict';
 
@@ -236,6 +327,25 @@ io.connect(common.DOCUMENT_STORE_API_ENDPOINT_SOCKET_IO,
   });
 ```
 
-> Note: open two terminal windows and run the event snippet in one, and the transfer snippet in the other to see how events in action.
+### Sample event
+```JSON
+{
+  "transferId":"cd7kg63q2a",
+  "timestamp":"2019-11-03T14:57:02.774Z",
+  "from":"kld://documentstore/m/zzuawz6bbl/e/zzjsqi1m1n/s/zzx11m3wmk/d/a",
+  "to":"kld://documentstore/m/zzlkw2gkyj/e/zzjsqi1m1n/s/zzued51b4k/d/b",
+  "hash":"b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
+  "document":"/images/kaleido-logo.png",
+  "status":"received"
+}
+```
+
+### Notes
+ - The property **status** in the JSON event will have one of the following three values:
+   - **sent**: document has been dispatched. It may or may not have been received.
+   - **received**: there is confirmation that the document has been received.
+   - **failed**: an error occurred that prevented the document from being received.
+
+> Tip: open two terminal windows and run the event snippet in one, and the transfer snippet in the other to see how events in action.
 
 To run the sample code: `npm run events`
