@@ -1,7 +1,7 @@
 # Document Store Snippets
 
 ## Introduction
-This repository contains a set of code snippets written in **NodeJS** illustrating how to upload, browser, search, inspect, transfer and delete files programmatically using the Document Store service REST API. It also shows how to listen to document store events using web sockets.
+This repository contains a set of code snippets written in **NodeJS** illustrating how to upload, browser, search, inspect, transfer and delete files programmatically using the Document Store service REST API. It also shows how to listen to document store events using web sockets. The complete API specification can be found [here](https://api.kaleido.io/documentstore.html). For more information about the document store service, visit the [documentation](https://docs.kaleido.io/kaleido-services/document-store/).
 
 ## Getting Started
 
