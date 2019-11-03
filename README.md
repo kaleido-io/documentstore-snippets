@@ -399,6 +399,6 @@ io.connect(common.DOCUMENT_STORE_API_ENDPOINT_SOCKET_IO,
    - **received**: there is confirmation that the document has been received.
    - **failed**: an error occurred that prevented the document from being received.
 
-> Tip: open two terminal windows and run the event snippet in one, and the transfer snippet in the other to see how events in action.
+> Tip: open two terminal windows and run the event snippet in one, and the transfer snippet in the other to see events in action.
 
 To run the sample code: `npm run events`
