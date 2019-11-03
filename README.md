@@ -33,6 +33,8 @@ The complete API specification can be found [here](https://api.kaleido.io/docume
 
 ![Set destination](./resources/readme_2.png)
 
+>  In a practical application destinations would correspond to document store service instances belonging to different organizations. In this example we are using a single service instance and a single destination just for illustration/test purposes.
+
 # Snippets
 
 ## Upload
@@ -278,9 +280,6 @@ axios({
   "result": "Document sent."
 }
 ```
-
-### Notes
- - In a practical application destinations would correspond to document store service instances belonging to different organizations. In this example we are using a single service instance just for illustration/test purposes.
 
 To run the sample code: `npm run transfer`
 
