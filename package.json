@@ -1,0 +1,23 @@
+{
+  "name": "document-store-snippets",
+  "version": "1.0.0",
+  "description": "Sample code snippts for Document Store",
+  "scripts": {
+    "events": "node ./lib/events.js",
+    "upload": "node ./lib/upload.js",
+    "browse": "node ./lib/browse.js",
+    "search": "node ./lib/search.js",
+    "metadata": "node ./lib/metadata.js",
+    "download": "node ./lib/download.js",
+    "transfer": "node ./lib/transfer.js",
+    "delete": "node ./lib/delete.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "form-data": "^2.5.1",
+    "socket.io-client": "^2.3.0"
+  }
+}
