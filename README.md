@@ -59,8 +59,8 @@ axios({
 
 ```JSON
 { 
-  result: "success",
-  hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+  "result": "success",
+  "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
 }
 ```
 
@@ -97,15 +97,15 @@ axios({
 
 ### Sample response
 ```JSON
-{ is_truncated: false,
-  entries:
+{ "is_truncated": false,
+  "entries":
    [
      { 
-       name: "kaleido-logo.png",
-       is_directory: false,
-       size: 141733,
-       last_modified: "2019-11-03T13:56:59.529Z",
-       hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+       "name": "kaleido-logo.png",
+       "is_directory": false,
+       "size": 141733,
+       "last_modified": "2019-11-03T13:56:59.529Z",
+       "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
       }
    ]
 }
@@ -147,13 +147,13 @@ axios({
 ### Sample response
 ```JSON
 {
-  documents:
+  "documents":
    [
      {
-       full_path: "images/kaleido-logo.png",
-       last_modified: "2019-11-03T14:10:59.201Z",
-       hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
-       size: 141733
+       "full_path": "images/kaleido-logo.png",
+       "last_modified": "2019-11-03T14:10:59.201Z",
+       "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
+       "size": 141733
       }
     ]
 }
@@ -192,11 +192,11 @@ axios({
 ### Sample response
 ```JSON
 { 
-  name: "kaleido-logo.png",
-  is_directory: false,
-  size: 141733,
-  last_modified: "2019-11-03T14:10:59.201Z",
-  hash: "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+  "name": "kaleido-logo.png",
+  "is_directory": false,
+  "size": 141733,
+  "last_modified": "2019-11-03T14:10:59.201Z",
+  "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
 }
 ```
 
@@ -264,7 +264,7 @@ axios({
 ### Sample response
 ```JSON
 {
-  result: "Document sent."
+  "result": "Document sent."
 }
 ```
 
