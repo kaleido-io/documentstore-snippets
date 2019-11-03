@@ -10,6 +10,7 @@
     "metadata": "node ./lib/metadata.js",
     "download": "node ./lib/download.js",
     "transfer": "node ./lib/transfer.js",
+    "transfer_logs": "node ./lib/transfer_logs.js",
     "delete": "node ./lib/delete.js"
   },
   "keywords": [],

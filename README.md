@@ -8,6 +8,7 @@ This repository contains a set of code snippets written in **NodeJS** illustrati
 - [Search](#search)
 - [Inspect](#inspect)
 - [Transfer](#transfer)
+- [Transfer Logs](#transfer-logs)
 - [Delete](#delete)
 - [Events](#events)
   
@@ -282,6 +283,48 @@ axios({
  - In a practical application destinations would correspond to document store service instances belonging to different organizations. In this example we are using a single service instance just for illustration/test purposes.
 
 To run the sample code: `npm run transfer`
+
+## Transfer Logs
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+axios({
+    url: common.DOCUMENT_STORE_API_ENDPOINT_TRANSFERS,
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to retrieve transfer logs: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{ "transfers":
+   [
+     {
+       "id": "cd7kg63q2a",
+       "timestamp": "2019-11-03T14:57:02.774Z",
+       "from": "kld://documentstore/m/zzuawz6bbl/e/zzjsqi1m1n/s/zzx11m3wmk/d/a",
+       "to": "kld://documentstore/m/zzlkw2gkyj/e/zzjsqi1m1n/s/zzued51b4k/d/b",
+       "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
+       "document": "/images/kaleido-logo.png",
+       "status": "received"
+      }
+   ]
+}
+```
+To run the sample code: `npm run transfer_logs`
 
 ## Delete
 
