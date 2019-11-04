@@ -9,8 +9,8 @@ This repository contains a set of code snippets written in **NodeJS** illustrati
 - [Search](#search)
 - [Inspect](#inspect)
 - [Transfer](#transfer)
-- [Transfer Logs](#transfer-logs)
-- [Transfer Events](#transfer-events)
+- [Transfer logs](#transfer-logs)
+- [Transfer events](#transfer-events)
 - [Delete](#delete)
 
 When a document is added to storage through the [upload](#upload) API, a hash that uniquely identifies its content is automatically calculated and returned. This value
@@ -295,7 +295,7 @@ axios({
 
 To run the sample code: `npm run transfer`
 
-## Transfer Logs
+## Transfer logs
 
 ### Sample code
 
@@ -338,7 +338,7 @@ axios({
 ```
 To run the sample code: `npm run transfer_logs`
 
-## Transfer Events
+## Transfer events
 
 ### Sample code
 
