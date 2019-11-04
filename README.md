@@ -418,6 +418,8 @@ To run the sample code: `npm run delete`
 
 ## Calculate single hash
 
+> Use only when uploading documents to external storage through means other than the [upload](#upload) API.
+
 ### Sample code
 
 ```Javascript
@@ -449,11 +451,11 @@ axios({
 }
 ```
 
-> Note: it is not necessary to calculate hashes to transfer documents.
-
 To run the sample code: `npm run calculate_single_hash`
 
 ## Calculate all hashes
+
+> Use only when uploading documents to external storage through means other than the [upload](#upload) API.
 
 ### Sample code
 
@@ -489,6 +491,10 @@ axios({
 
 ### Notes
 
-- The value of the boolean query parameter **reset** should be **true** only if documents are uploaded *and deleted* through means other than the Document Store service API.
+- When the boolean value of the query parameter **reset** is
+  - **false**: only missing hashes will be calculated
+  - **true**: all hashes will be calculated
+
+> Note: the value of the boolean query parameter **reset** should be **true** only if documents are deleted from external storage through means other than the [delete](#delete) API.
 
 To run the sample code: `npm run calculate_all_hashes`
