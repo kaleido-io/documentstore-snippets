@@ -12,8 +12,18 @@ This repository contains a set of code snippets written in **NodeJS** illustrati
 - [Transfer Logs](#transfer-logs)
 - [Transfer Events](#transfer-events)
 - [Delete](#delete)
+
+When a document is added to storage through the [upload](#upload) API, a hash that uniquely identifies its content is automatically calculated and returned. This value
+can be used to pin the document on-chain and is also returned by the [browse](#browse), [search](#search) and [inspect](#inspect) APIs.
   
 The complete API specification can be found [here](https://api.kaleido.io/documentstore.html). The API swagger file can be downloaded [here](https://api.kaleido.io/service-documentstore.yaml). For more information about the document store service, visit the [documentation](https://docs.kaleido.io/kaleido-services/document-store/).
+
+## External Storage
+
+The Document Store service can optionally be configured to use external storage. AWS S3 buckets and Azure Blob containers are supported. Note that documents added to external storage through means other than the [upload](#upload) API will not to have their hashes automatically calculated. The following two code snippets show how to calculate hashes in such scenario:
+
+- [Calculate single hash](#Calculate-single-hash)
+- [Calculate all hashes](#Calculate-all-hashes)
 
 ## Getting Started
 
@@ -138,7 +148,8 @@ axios({
 
 ### Sample response
 ```JSON
-{ "is_truncated": false,
+{
+  "is_truncated": false,
   "entries":
    [
      { 
@@ -310,7 +321,8 @@ axios({
 ### Sample response
 
 ```JSON
-{ "transfers":
+{
+  "transfers":
    [
      {
        "id": "cd7kg63q2a",
@@ -403,3 +415,80 @@ axios({
 ```
 
 To run the sample code: `npm run delete`
+
+## Calculate single hash
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+axios({
+    method: 'patch',
+    url: common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS + '/images/kaleido-logo.png',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to calculate hash: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{ 
+  "result": "success",
+  "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77"
+}
+```
+
+> Note: it is not necessary to calculate hashes to transfer documents.
+
+To run the sample code: `npm run calculate_single_hash`
+
+## Calculate all hashes
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+const ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 10);
+
+axios({
+    method: 'post',
+    url: ENDPOINT + '/sync_hashes?reset=true',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to calculate all hashes: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{
+    "hashes_calculated": 1
+}
+```
+
+### Notes
+
+- The value of the boolean query parameter **reset** should be **true** only if documents are uploaded *and deleted* through means other than the Document Store service API.
+
+To run the sample code: `npm run calculate_all_hashes`
