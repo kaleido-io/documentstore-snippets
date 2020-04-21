@@ -18,6 +18,13 @@ can be used to pin the document on-chain and is also returned by the [browse](#b
   
 The complete API specification can be found [here](https://api.kaleido.io/documentstore.html). The API swagger file can be downloaded [here](https://api.kaleido.io/service-documentstore.yaml). For more information about the document store service, visit the [documentation](https://docs.kaleido.io/kaleido-services/document-store/).
 
+## Preferences
+
+By default, on the recipient side, transferred documents are saved to `/received/${recipient_destination}`. This path can be customized using the preferences API. The path must be absolute and can contain any combination of the variables **sender_org**, **sender_destination**, and **recipient_destination**.
+
+- [Get Preferences](#get-preferences)
+- [Set Preferences](#set-preferences)
+
 ## External Storage
 
 The Document Store service can optionally be configured to use external storage. AWS S3 buckets and Azure Blob containers are supported. Note that documents added to external storage through means other than the [upload](#upload) API will not to have their hashes automatically calculated. The following two code snippets show how to calculate hashes in such scenario:
@@ -438,6 +445,81 @@ axios({
 ```
 
 To run the sample code: `npm run delete`
+
+## Get Preferences
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+const ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 10);
+
+axios({
+    url: ENDPOINT + '/preferences',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to delete document: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{
+  "receivedDocumentsPath": "/received/${recipient_destination}"
+}
+```
+
+To run the sample code: `npm run preferences_get`
+
+## Set Preferences
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+const ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 10);
+
+axios({
+    method: 'put',
+    url: ENDPOINT + '/preferences',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    },
+    data: {
+      key: 'receivedDocumentsPath',
+      value: '/transfers/to/${recipient_destination}/from/${sender_org}-${sender_destination}'
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to delete document: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{
+  "result": "success"
+}
+```
+
+To run the sample code: `npm run preferences_set`
 
 ## Calculate single hash
 

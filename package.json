@@ -12,6 +12,8 @@
     "transfer_logs": "node ./lib/transfer_logs.js",
     "transfer_events": "node ./lib/transfer_events.js",
     "delete": "node ./lib/delete.js",
+    "preferences_get": "node ./lib/preferences_get.js",
+    "preferences_set": "node ./lib/preferences_set.js",
     "calculate_single_hash": "node ./lib/calculate_single_hash.js",
     "calculate_all_hashes": "node ./lib/calculate_all_hashes.js"
   },
