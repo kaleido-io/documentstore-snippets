@@ -356,7 +356,7 @@ axios({
 - The recipient can use **senderSignature** as proof of the transfer.
 - The property **recipientSignature** will only be present for successful transfers (status received).
 - The sender can use **recipientSignature** as proof of the transfer.
-- The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hez digest of result.
+- The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hex digest of result.
 
 To run the sample code: `npm run transfer_logs`
 
@@ -411,7 +411,7 @@ io.connect(common.DOCUMENT_STORE_API_ENDPOINT_SOCKET_IO,
  - The recipient can use **senderSignature** as proof of the transfer.
  - The property **recipientSignature** will only be present for successful transfers (status received).
  - The sender can use **recipientSignature** as proof of the transfer.
- - The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hez digest of result.
+ - The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hex digest of result.
  - The property **status** in the JSON event will have one of the following three values:
    - **sent**: document has been dispatched. It may or may not have been received.
    - **received**: there is confirmation that the document has been received.
