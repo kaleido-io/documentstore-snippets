@@ -18,6 +18,13 @@ can be used to pin the document on-chain and is also returned by the [browse](#b
   
 The complete API specification can be found [here](https://api.kaleido.io/documentstore.html). The API swagger file can be downloaded [here](https://api.kaleido.io/service-documentstore.yaml). For more information about the document store service, visit the [documentation](https://docs.kaleido.io/kaleido-services/document-store/).
 
+## Preferences
+
+By default, on the recipient side, transferred documents are saved to `/received/${recipient_destination}`. This path can be customized using the preferences API. The path must be absolute and can contain any combination of the variables **sender_org**, **sender_destination**, and **recipient_destination**.
+
+- [Get Preferences](#get-preferences)
+- [Set Preferences](#set-preferences)
+
 ## External Storage
 
 The Document Store service can optionally be configured to use external storage. AWS S3 buckets and Azure Blob containers are supported. Note that documents added to external storage through means other than the [upload](#upload) API will not to have their hashes automatically calculated. The following two code snippets show how to calculate hashes in such scenario:
@@ -289,9 +296,13 @@ axios({
 ### Sample response
 ```JSON
 {
-  "result": "Document sent."
+    "result": "Document sent.",
+    "transfer_id": "cbcce631-4355-4445-b750-0b90c78c78a1"
 }
 ```
+
+### Notes
+- The property `transfer_id` is new. You may need to upgrade your environment to access it.
 
 To run the sample code: `npm run transfer`
 
@@ -325,17 +336,28 @@ axios({
   "transfers":
    [
      {
-       "id": "cd7kg63q2a",
+       "id": "cbcce631-4355-4445-b750-0b90c78c78a1",
        "timestamp": "2019-11-03T14:57:02.774Z",
        "from": "kld://documentstore/m/zzuawz6bbl/e/zzjsqi1m1n/s/zzx11m3wmk/d/a",
        "to": "kld://documentstore/m/zzlkw2gkyj/e/zzjsqi1m1n/s/zzued51b4k/d/b",
        "hash": "b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
        "document": "/images/kaleido-logo.png",
-       "status": "received"
+       "status": "received",
+       "transferHash": "a436d9b261b29df52d2f00f853aee726177db2f6f1956fc9a2f8bce76a053277",
+       "senderSignature": "Unz2OWjiSRLJmZ/5XVwroYVP+jKASwJeZ7mRqntbpTeMcyMeAexd9XGNOwOWD7PQWRmGbk2MZESMmBqRScebyUaAZDrj+zTxMYePWBM2vN7PA0ta3YKk+5VidOtHyeHxmIes9OKK/IOGj2F4RSAPOZVlkEvSHU8YXoFpn8t1rN6KRCtTgmYzF6lmCewv9PA1KCI6ZUxhcnWcPD01vtGkFDXx0s3IKRJ5oDvEnWf0PxVsSe3k75PTUX4z3j4ktypKfQdFVH7yAfVYNcbhhI9YLK8xajC1meNvbp5WB7Mv5lF0gSgueb7D45Pct1uAgmnk2eSV0wVX9MnoiQUGN18ujA==",
+       "recipientSignature": "fsA/5zCYoZCNWvATVBG0YECyvo4VnxHk9/KeCzOm8fyPmC4QbyQ4UwQUpkP7rSEQGqxu5UrZsLTouxVl/fX0T1bzHk851S9lOSop5AEx9ZDxjCZiGSMQ9quIceR0VsITv/gGYa4i1hPYYy8m7W7F6SBuIUkUg5EzRurhyXSZmUFw5O/U9+yqgfWnzxo+DuQ6Im/Hs2XKOq/M8JJe++vwaJCbc/eKAwnSZ1Xt5FFl4ZAtFYw4lwdnEAV3AwkcK8NCo/XueD5/L3agt5u9ykPjMAswHEg3HrSP00QlfM01tx6Cb5tgGBF/GBQgcTFDwVos9Bjl+m2TwZJmHDHVNNZR0Q=="
       }
    ]
 }
 ```
+
+### Notes
+- The properties **transferHash**, **senderSignature** and **recipientSignature** are new. You may need to upgrade your environment to access them.
+- The recipient can use **senderSignature** as proof of the transfer.
+- The property **recipientSignature** will only be present for successful transfers (status received).
+- The sender can use **recipientSignature** as proof of the transfer.
+- The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hez digest of result.
+
 To run the sample code: `npm run transfer_logs`
 
 ## Transfer events
@@ -377,11 +399,19 @@ io.connect(common.DOCUMENT_STORE_API_ENDPOINT_SOCKET_IO,
   "to":"kld://documentstore/m/zzlkw2gkyj/e/zzjsqi1m1n/s/zzued51b4k/d/b",
   "hash":"b5d4c3efcc59b32870af6d3cef645c9d6dbc5580f556316af2aabff768e54d77",
   "document":"/images/kaleido-logo.png",
-  "status":"received"
+  "status":"received",
+  "transferHash": "a436d9b261b29df52d2f00f853aee726177db2f6f1956fc9a2f8bce76a053277",
+  "senderSignature": "Unz2OWjiSRLJmZ/5XVwroYVP+jKASwJeZ7mRqntbpTeMcyMeAexd9XGNOwOWD7PQWRmGbk2MZESMmBqRScebyUaAZDrj+zTxMYePWBM2vN7PA0ta3YKk+5VidOtHyeHxmIes9OKK/IOGj2F4RSAPOZVlkEvSHU8YXoFpn8t1rN6KRCtTgmYzF6lmCewv9PA1KCI6ZUxhcnWcPD01vtGkFDXx0s3IKRJ5oDvEnWf0PxVsSe3k75PTUX4z3j4ktypKfQdFVH7yAfVYNcbhhI9YLK8xajC1meNvbp5WB7Mv5lF0gSgueb7D45Pct1uAgmnk2eSV0wVX9MnoiQUGN18ujA==",
+  "recipientSignature": "fsA/5zCYoZCNWvATVBG0YECyvo4VnxHk9/KeCzOm8fyPmC4QbyQ4UwQUpkP7rSEQGqxu5UrZsLTouxVl/fX0T1bzHk851S9lOSop5AEx9ZDxjCZiGSMQ9quIceR0VsITv/gGYa4i1hPYYy8m7W7F6SBuIUkUg5EzRurhyXSZmUFw5O/U9+yqgfWnzxo+DuQ6Im/Hs2XKOq/M8JJe++vwaJCbc/eKAwnSZ1Xt5FFl4ZAtFYw4lwdnEAV3AwkcK8NCo/XueD5/L3agt5u9ykPjMAswHEg3HrSP00QlfM01tx6Cb5tgGBF/GBQgcTFDwVos9Bjl+m2TwZJmHDHVNNZR0Q=="
 }
 ```
 
 ### Notes
+ - Properties **transferHash**, **senderSignature** and **recipientSignature** are new. You may need to upgrade your environment to access them.
+ - The recipient can use **senderSignature** as proof of the transfer.
+ - The property **recipientSignature** will only be present for successful transfers (status received).
+ - The sender can use **recipientSignature** as proof of the transfer.
+ - The property transferHash can be calculated as follows: concatenate properties **from**, **to**, **hash** and **timestamp**. Calculate SHA256 hez digest of result.
  - The property **status** in the JSON event will have one of the following three values:
    - **sent**: document has been dispatched. It may or may not have been received.
    - **received**: there is confirmation that the document has been received.
@@ -415,6 +445,81 @@ axios({
 ```
 
 To run the sample code: `npm run delete`
+
+## Get Preferences
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+const ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 10);
+
+axios({
+    url: ENDPOINT + '/preferences',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to delete document: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{
+  "receivedDocumentsPath": "/received/${recipient_destination}"
+}
+```
+
+To run the sample code: `npm run preferences_get`
+
+## Set Preferences
+
+### Sample code
+
+```Javascript
+'use strict';
+
+const axios = require('axios');
+const common = require('./common');
+
+const ENDPOINT = common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.substr(0, common.DOCUMENT_STORE_API_ENDPOINT_DOCUMENTS.length - 10);
+
+axios({
+    method: 'put',
+    url: ENDPOINT + '/preferences',
+    auth: {
+      username: common.APP_CREDENTIAL_USER,
+      password: common.APP_CREDENTIAL_PASSWORD
+    },
+    data: {
+      key: 'receivedDocumentsPath',
+      value: '/transfers/to/${recipient_destination}/from/${sender_org}-${sender_destination}'
+    }
+}).then(response => {
+  console.log(response.data);
+}).catch(err => {
+  console.log('Failed to delete document: ' + err);
+});
+```
+
+### Sample response
+
+```JSON
+{
+  "result": "success"
+}
+```
+
+To run the sample code: `npm run preferences_set`
 
 ## Calculate single hash
 
